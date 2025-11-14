@@ -1,0 +1,26 @@
+# Train/val/test image paths
+train: C:\Users\dions\Downloads\data\train\images
+val: C:\Users\dions\Downloads\data\train\images
+
+# Number of classes
+nc: 1
+
+# Class names
+names: ["pothole"]
+
+# Data augmentation settings
+augment:
+  hsv_h: 0.015       # Hue shift
+  hsv_s: 0.7         # Saturation shift
+  hsv_v: 0.4         # Brightness shift
+  degrees: 10        # Random rotation ±10°
+  translate: 0.1     # Translate ±10%
+  scale: 0.5         # Scale up/down 50%
+  shear: 2.0         # Shear angle
+  perspective: 0.0005
+  flipud: 0.0        # Vertical flip (disabled for roads)
+  fliplr: 0.5        # Horizontal flip (enabled)
+  mosaic: 1.0        # Mosaic augmentation (enabled)
+  mixup: 0.2         # Mixup augmentation
+  copy_paste: 0.1    # Copy-paste augmentation
+  blur: 0.2          # Motion/blur (helps with camera shake)
