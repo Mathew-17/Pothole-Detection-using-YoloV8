@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload a Pothole - RoadGuard AI</title>
+  <style>
+    :root {
+      --primary-color: #ff6b6b;
+      --secondary-color: #4ecdc4;
+      --dark-bg: #1a1a1a;
+      --light-text: #f0f0f0;
+      --dark-text: #333;
+      --card-bg: #2a2a2a;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      background-color: var(--dark-bg);
+      color: var(--light-text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    .upload-container {
+      background-color: var(--card-bg);
+      padding: 3rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    p {
+      margin-bottom: 2rem;
+      color: #aaa;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="file"] {
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 2px solid var(--secondary-color);
+      color: var(--light-text);
+      background-color: transparent;
+      cursor: pointer;
+    }
+
+    button {
+      padding: 1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      color: var(--dark-bg);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .status-message {
+      margin-top: 1.5rem;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .back-link {
+        display: block;
+        margin-top: 2rem;
+        color: var(--secondary-color);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+        color: var(--primary-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="upload-container">
+    <h1>Report a Pothole</h1>
+    <p>Help us make roads safer by uploading a clear image of the pothole.</p>
+
+    <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="pothole_image">Choose Image:</label>
+        <input type="file" id="pothole_image" name="pothole_image" accept="image/*" required>
+      </div>
+      <button type="submit">Upload Image</button>
+    </form>
+
+    <div id="status" class="status-message"></div>
+
+    <a href="/" class="back-link">← Go Back to Homepage</a>
+  </div>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const statusDiv = document.getElementById('status');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      statusDiv.textContent = 'Uploading...';
+
+      try {
+        const response = await fetch('/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        const text = await response.text();
+
+        if (response.ok) {
+          statusDiv.textContent = text;
+          statusDiv.style.color = 'var(--secondary-color)';
+        } else {
+          statusDiv.textContent = `Error: ${text}`;
+          statusDiv.style.color = 'var(--primary-color)';
+        }
+      } catch (error) {
+        statusDiv.textContent = 'An error occurred. Please try again.';
+        statusDiv.style.color = 'var(--primary-color)';
+        console.error('Upload error:', error);
+      }
+    });
+  </script>
+</body>
+</html>
